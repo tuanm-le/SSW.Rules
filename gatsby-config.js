@@ -26,14 +26,6 @@ module.exports = {
         includeInDevelopment: true,
       },
     },
-    {
-      resolve: 'gatsby-plugin-decap-cms',
-      options: {
-        manualInit: true,
-        stylesPath: `${__dirname}/src/styles.css`,
-        modulePath: `${__dirname}/src/cms/cms.js`,
-      },
-    },
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-sitemap',
     'gatsby-transformer-json',
