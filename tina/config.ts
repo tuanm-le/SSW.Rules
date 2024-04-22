@@ -48,6 +48,90 @@ export default defineConfig({
           },
         ],
       },
+      {
+        name: "rule",
+        label: "Rules",
+        path: "content/rules",
+        fields: [
+          {
+            type: "string",
+            name: "title",
+            label: "Title",
+            isTitle: true,
+            required: true,
+          },
+          {
+            type: "string",
+            name: "uri",
+            required: true,
+            label: "Uri (keep it short e.g. /my-url)",
+            ui: {
+              validate: (value, data) => {
+                if (!isValidUri(value)) {
+                  return 'Not a valid URI - use snakecase (e.g. my-url)'
+                }
+              }
+            }
+          },
+          {
+            label: 'Author',
+            name: 'author',
+            type: 'object',
+            fields: [
+              {
+                type: "string",
+                name: "name",
+                label: "Name",
+                isTitle: true,
+                required: true,
+              },
+              {
+                type: "string",
+                name: "url",
+                label: "url (prefferable SSW.People)",
+                required: true,
+              },
+            ],
+          },
+          {
+            type: "rich-text",
+            name: "body",
+            label: "Body",
+            isBody: true,
+          },
+          {
+            label: 'Related Rules',
+            name: 'related',
+            type: 'reference',
+            collections: ['rule'],
+          },
+          {
+            label: 'Redirects (old URIs)',
+            name: 'redirects',
+            type: 'string',
+            list: true,
+            description: 'If the rule is archived',
+          },
+          {
+            label: 'Archived reason',
+            name: 'archiveReason',
+            type: 'string',
+            required: false,
+            description: 'Reason for archiving (prefferably link to a new rule)'
+          },
+          {
+            label: 'Id',
+            name: 'guid',
+            type: 'string',
+            required: true,
+            description: 'Unique ID for the rule - dont change this after creation'
+          }
+        ],
+      }
     ],
   },
 });
+
+function isValidUri(uri: string): boolean {
+  return /^[a-z0-9-]+$/i.test(uri);
+}

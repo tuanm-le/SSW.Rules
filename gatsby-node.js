@@ -9,6 +9,9 @@ const path = require('path');
 const Map = require('core-js/features/map');
 const axios = require('axios');
 const { createContentDigest } = require('gatsby-core-utils');
+const client = require('./tina/__generated__/client');
+
+const express = require('express');
 
 if (process.env.APPINSIGHTS_INSTRUMENTATIONKEY) {
   // Log build time stats to appInsights
@@ -35,6 +38,10 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
       value: slug,
     });
   }
+};
+
+exports.onCreateDevServer = ({ app }) => {
+  app.use('/admin', express.static('public/admin'));
 };
 exports.createSchemaCustomization = ({ actions }) => {
   const { createTypes } = actions;
@@ -85,6 +92,13 @@ exports.onCreateWebpackConfig = ({ actions }) => {
 };
 
 exports.createPages = async ({ graphql, actions }) => {
+  const rulesResponse = await client.queries.postConnection();
+  console.log(rulesResponse);
+  const posts = rulesResponse.data.postConnection.edges.map((rule) => {
+    return { slug: rule.node._sys.filename };
+  });
+  console.log(posts);
+
   const { createPage } = actions;
 
   const result = await graphql(`
