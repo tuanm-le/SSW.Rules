@@ -9,6 +9,7 @@ import {
   RemoveReaction,
 } from '../../services/apiService';
 import { ApplicationInsights } from '@microsoft/applicationinsights-web';
+import dayjs from 'dayjs';
 
 const appInsights = new ApplicationInsights({
   config: {
@@ -25,8 +26,14 @@ const Reaction = (props) => {
   const [change, setChange] = useState(0);
   const [currentReactionType, setCurrentReactionType] = useState(null);
 
-  const { isAuthenticated, user, getIdTokenClaims, loginWithRedirect } =
-    useAuth0();
+  const {
+    isAuthenticated,
+    user,
+    getIdTokenClaims,
+    loginWithRedirect,
+    getAccessTokenSilently,
+    getTokenSilently,
+  } = useAuth0();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -82,6 +89,18 @@ const Reaction = (props) => {
         userId: user.sub,
       };
       const jwt = await getIdTokenClaims();
+      const now = dayjs().valueOf();
+      console.log('jwt', jwt.exp);
+      console.log(now);
+      if (now < jwt.exp) {
+        console.log(111);
+      } else {
+        console.log(222);
+        console.log(getAccessTokenSilently());
+        // console.log(getTokenSilently());
+        // const test = await getAccessTokenSilently();
+        // console.log(test);
+      }
       if (currentReactionType == type) {
         removePreviousReaction();
         setCurrentReactionType(null);

@@ -37,6 +37,8 @@ const Layout = ({
         clientId={process.env.AUTH0_CLIENT_ID}
         authorizationParams={{
           redirect_uri: process.env.AUTH0_REDIRECT_URI,
+          audience: 'YOUR_AUDIENCE_ID', //missing
+          scope: 'openid profile email offline_access', //missing
         }}
         // redirectUri={process.env.AUTH0_REDIRECT_URI}
         onRedirectCallback={onRedirectCallback}
